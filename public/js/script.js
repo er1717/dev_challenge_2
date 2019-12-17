@@ -15,10 +15,10 @@ productForm.addEventListener('submit', e => {
     if (res.error) {
       productOutput.innerHTML = res.error;
     } else {
-      productOutput.innerHTML = `Use this ${res.name}`;
+      productOutput.innerHTML = `Use this: ${res.name}`;
       setTimeout(() => {
         $('#calculatorModal').modal('hide');
-        productName.innerHTML = `Product Name: ${res.name}`;
+        productName.innerHTML = `${res.name}`;
       }, 5000);
     }
   })
