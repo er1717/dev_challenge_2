@@ -168,3 +168,5 @@ production:
   clients:
     default:
       uri: <%= ENV['MONGODB_URI'] %>
+  options:
+    raise_not_found_error: false
