@@ -6,7 +6,8 @@ class ProductsController < ApplicationController
     result = [];
     required = [:length, :width, :height, :weight]
     if required.all? { |k| params.has_key? k}
-      result = Product.find_by(length: params[:length], width: params[:width], height: params[:height], weight: params[:weight])
+      #result = Product.find_by(length: params[:length], width: params[:width], height: params[:height], weight: params[:weight])
+      result = Product.find_by(:length.gte => params[:length], :width.lte => params[:width], :height.lte => params[:height], :weight.lte => params[:weight])
       result = {error: "No matching products"} unless result
     elsif required.any? { |k| params.has_key? k}
       result = {error: "One or more of these required fields are missing #{required}"}
