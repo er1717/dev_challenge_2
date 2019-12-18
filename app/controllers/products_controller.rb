@@ -1,13 +1,16 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [:update, :destroy]
 
-
   def index
     result = [];
     required = [:length, :width, :height, :weight]
     if required.all? { |k| params.has_key? k}
-      result = Product.find_by(length: params[:length], width: params[:width], height: params[:height], weight: params[:weight])
-      #result = Product.find_by(:length.gte => params[:length], :width.lte => params[:width], :height.lte => params[:height], :weight.lte => params[:weight])
+      list = Product.where(:length.gte => params[:length], :width.gte => params[:width], :height.gte => params[:height], :weight.gte => params[:weight])
+      result = list.map do |product|
+        match_score = (product.length - params[:length].to_i).abs() + (product.width - params[:width].to_i).abs() + (product.height - params[:height].to_i).abs() + (product.weight - params[:weight].to_i).abs()
+        {product: product, score: match_score}
+      end.sort_by { |item| item[:score]}.first
+      result = result[:product] if result
       result = {error: "No matching products"} unless result
     elsif required.any? { |k| params.has_key? k}
       result = {error: "One or more of these required fields are missing #{required}"}
